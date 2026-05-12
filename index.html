@@ -1,0 +1,1555 @@
+Now an issue. This is the code:
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoFix Garage | Autohuolto & Autopesu Lahti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00d4ff;
+            --electric-blue: #0099cc;
+            --deep-blue: #001a33;
+            --darker-blue: #000d1a;
+            --accent-cyan: #00f0ff;
+            --glass-bg: rgba(0, 26, 51, 0.85);
+            --glass-border: rgba(0, 212, 255, 0.3);
+            --text-light: #e6f7ff;
+            --text-dim: #8ab4c7;
+            --success: #00ff88;
+            --warning: #ffaa00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker-blue);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--deep-blue);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--electric-blue);
+            border-radius: 4px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(0, 13, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--electric-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .logo-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.6rem;
+            color: white;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .logo-text span {
+            color: var(--neon-blue);
+            font-weight: 700;
+            font-size: 1rem;
+            display: block;
+            letter-spacing: 4px;
+            margin-top: -5px;
+        }
+
+        .corner-brand {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 6px 14px;
+            border-radius: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('workshop-bg.jpg') center/cover no-repeat;
+            filter: brightness(0.3) contrast(1.1);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                rgba(0, 13, 26, 0.6) 0%, 
+                rgba(0, 26, 51, 0.8) 50%, 
+                rgba(0, 13, 26, 0.95) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 8px 20px;
+            border-radius: 30px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(0, 240, 255, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.6); }
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            color: white;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+            line-height: 1.1;
+        }
+
+        .hero h1 .fix {
+            color: var(--neon-blue);
+            text-shadow: 0 0 40px rgba(0, 212, 255, 0.8);
+        }
+
+        .hero-subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 500;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .hero-tagline {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .hero-tagline strong {
+            color: var(--neon-blue);
+            font-weight: 600;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--electric-blue));
+            color: var(--deep-blue);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            color: var(--neon-blue);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 14px 32px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--neon-blue);
+            display: block;
+        }
+
+        .stat-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 2rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: white;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header h2 span {
+            color: var(--neon-blue);
+        }
+
+        .section-header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-line {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            margin: 1rem auto 0;
+        }
+
+        /* Services Section */
+        .services-section {
+            background: linear-gradient(180deg, var(--darker-blue) 0%, var(--deep-blue) 100%);
+        }
+
+        .services-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.05), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .service-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .service-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Washing Section */
+        .washing-section {
+            background: var(--darker-blue);
+        }
+
+        .washing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .price-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .price-card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 5px 25px rgba(0, 212, 255, 0.1);
+        }
+
+        .price-card.featured {
+            border-color: var(--neon-blue);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 26, 51, 0.9));
+        }
+
+        .price-card.featured::after {
+            content: 'SUOSITUIN';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--neon-blue);
+            color: var(--deep-blue);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 10px;
+            letter-spacing: 1px;
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .price-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .price-amount {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+            font-weight: 700;
+        }
+
+        .price-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .price-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            padding: 0.3rem 0;
+        }
+
+        .price-detail span:last-child {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .price-note {
+            grid-column: 1 / -1;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-style: italic;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .extra-services {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .extra-services h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .extra-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .extra-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 26, 51, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .extra-item span:first-child {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .extra-item span:last-child {
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .tehopesu-banner {
+            max-width: 1200px;
+            margin: 1.5rem auto 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 153, 204, 0.1));
+            border: 1px solid var(--neon-blue);
+            border-radius: 12px;
+            padding: 1.2rem 2rem;
+            text-align: center;
+        }
+
+        .tehopesu-banner p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .tehopesu-banner strong {
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Maintenance Section */
+        .maintenance-section {
+            background: linear-gradient(180deg, var(--deep-blue) 0%, var(--darker-blue) 100%);
+        }
+
+        .maintenance-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .maintenance-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .maintenance-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .maintenance-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .maintenance-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .maintenance-card p {
+            color: var(--text-dim);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .maintenance-card .price-note-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid var(--neon-blue);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .maintenance-card .price-note-box p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .maintenance-card .price-note-box strong {
+            color: var(--neon-blue);
+        }
+
+        /* Booking Section */
+        .booking-section {
+            background: var(--darker-blue);
+            position: relative;
+        }
+
+        .booking-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+        }
+
+        .booking-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .booking-form {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            background: rgba(0, 13, 26, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--electric-blue));
+            color: var(--deep-blue);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .success-message.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-message .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-message h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .success-message p {
+            color: var(--text-dim);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(180deg, var(--darker-blue) 0%, var(--deep-blue) 100%);
+        }
+
+        .contact-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: var(--neon-blue);
+            transform: translateY(-3px);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .contact-card h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card p,
+        .contact-card a {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-card a:hover {
+            color: var(--neon-blue);
+        }
+
+        .hours-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.3rem;
+            max-width: 250px;
+            margin: 0 auto;
+        }
+
+        .hours-grid span {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .hours-grid span:nth-child(even) {
+            color: var(--text-light);
+            text-align: right;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-blue);
+            border-top: 1px solid var(--glass-border);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            color: var(--neon-blue);
+        }
+
+        .footer p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer .slogan {
+            color: var(--accent-cyan);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 13, 26, 0.98);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .price-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .extra-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--deep-blue);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+        }
+
+        .spinner.active {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+      .logo-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                   <div class="logo-icon">
+    <img src="https://i.imgur.com/xmZUoRk.png" alt="AutoFix Logo">
+    </div>
+                </div>
+                <div class="logo-text">
+                    AutoFix
+                    <span>GARAGE</span>
+                </div>
+            </div>
+            <div class="corner-brand">AutoApu RE</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#palvelut">Palvelut</a></li>
+                <li><a href="#pesut">Pesut</a></li>
+                <li><a href="#huolto">Huolto</a></li>
+                <li><a href="#yhteystiedot">Yhteystiedot</a></li>
+                <li><a href="#varaus">Varaus</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="koti">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge">🔧 Lahti &bull; Mestarinkatu 24</div>
+            <h1>AUTO<span class="fix">FIX</span> GARAGE</h1>
+            <p class="hero-subtitle">Autohuolto &bull; Autopesu &bull; Korjaamo</p>
+            <p class="hero-tagline">
+                Korjaa autosi <strong>kohtuulliseen hintaan</strong> — ammattitaitoinen palvelu ja laadukas jälki jokaisessa työssä.
+            </p>
+            <div class="hero-cta">
+                <a href="#varaus" class="btn-primary">
+                    📅 Varaa Aika
+                </a>
+                <a href="#pesut" class="btn-secondary">
+                    💧 Katso Hinnat
+                </a>
+            </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section" id="palvelut">
+        <div class="section-header fade-in">
+            <h2>Palvelu<span>mme</span></h2>
+            <p>Kattavat autonhoitopalvelut ammattitaidolla</p>
+            <div class="section-line"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <div class="service-icon">🔧</div>
+                <h3>Autohuolto</h3>
+                <p>Säännöllinen huolto pitää autosi kunnossa ja pidentää sen käyttöikää. Teemme huollot valmistajan ohjeiden mukaisesti.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">🔍</div>
+                <h3>Diagnostiikka</h3>
+                <p>Moderni vikakoodinluku ja diagnostiikka. Löydämme ongelman nopeasti.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">🛠️</div>
+                <h3>Auton Korjaukset</h3>
+                <p>Moottori, vaihteisto, jarrut, alusta — korjaamme kaiken ammattitaidolla. Hinta sovittavissa tapauskohtaisesti.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">💧</div>
+                <h3>Autopesut</h3>
+                <p>Sisäpesusta täyspesuun ja vaahdotukseen. Hoidamme autosi puhtaaksi niin sisältä kuin ulkoa.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">🛡️</div>
+                <h3>Öljynvaihdot</h3>
+                <p>Nopeat ja luotettavat öljynvaihdot laadukkailla öljyillä. Suojaa moottoria ja parantaa suorituskykyä.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="service-icon">✨</div>
+                <h3>Vahaukset</h3>
+                <p>Kevytvahauksesta UHD-vahaukseen. Suojaa maalipintaa ja antaa autollesi upean kiillon.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Washing Section -->
+    <section class="washing-section" id="pesut">
+        <div class="section-header fade-in">
+            <h2>Autopesu<span>t</span> & Hinnasto</h2>
+            <p>Laadukasta puhtautta jokaiseen tarpeeseen</p>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="washing-container">
+            <div class="price-grid">
+                <div class="price-card fade-in">
+                    <div class="price-header">
+                        <span class="price-name">SISÄPESU</span>
+                        <span class="price-amount">Alk. 20€</span>
+                    </div>
+                    <div class="price-details">
+                        <div class="price-detail">
+                            <span>Henkilöautot</span>
+                            <span>Alk. 20€</span>
+                        </div>
+                        <div class="price-detail">
+                            <span>Maastoauto / Pakettiauto</span>
+                            <span>Alk. 30€</span>
+                        </div>
+                        <div class="price-note">Sisäpesu sis. sisäpesu, mattojen pesu, ikkunat sisältä, takakontti + imurointi</div>
+                    </div>
+                </div>
+
+                <div class="price-card fade-in">
+                    <div class="price-header">
+                        <span class="price-name">ULKOPESU</span>
+                        <span class="price-amount">Alk. 20€</span>
+                    </div>
+                    <div class="price-details">
+                        <div class="price-detail">
+                            <span>Henkilöautot</span>
+                            <span>Alk. 20€</span>
+                        </div>
+                        <div class="price-detail">
+                            <span>Maastoauto / Pakettiauto</span>
+                            <span>Alk. 30€</span>
+                        </div>
+                        <div class="price-note">Ulkopesu sis. ulkopesu ja ovien välit</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-card fade-in">
+                    <div class="price-header">
+                        <span class="price-name">PERUSPESU</span>
+                        <span class="price-amount">Alk. 30€</span>
+                    </div>
+                    <div class="price-details">
+                        <div class="price-detail">
+                            <span>Henkilöautot</span>
+                            <span>Alk. 30€</span>
+                        </div>
+                        <div class="price-detail">
+                            <span>Maastoauto / Pakettiauto</span>
+                            <span>Alk. 40€</span>
+                        </div>
+                        <div class="price-note">Peruspesu sis. sisä- ja ulkopesun, ovien välit, mattojen ja ikkunoiden pesu</div>
+                    </div>
+                </div>
+
+                <div class="price-card featured fade-in">
+                    <div class="price-header">
+                        <span class="price-name">TÄYSPESU</span>
+                        <span class="price-amount">Alk. 40€</span>
+                    </div>
+                    <div class="price-details">
+                        <div class="price-detail">
+                            <span>Henkilöautot</span>
+                            <span>Alk. 40€</span>
+                        </div>
+                        <div class="price-detail">
+                            <span>Maastoauto / Pakettiauto</span>
+                            <span>Alk. 55€</span>
+                        </div>
+                        <div class="price-note">Kokopesu sis. sisä- ja ulkopesu, ovien välit, mattojen ja ikkunoiden pesu,takakontti + imurointi</div>
+                    </div>
+                </div>
+
+                <div class="price-card fade-in">
+                    <div class="price-header">
+                        <span class="price-name">KEVYTVAHAUS</span>
+                        <span class="price-amount">Alk. 50€</span>
+                    </div>
+                    <div class="price-details">
+                        <div class="price-detail">
+                            <span>Henkilöautot</span>
+                            <span>Alk. 50€</span>
+                        </div>
+                        <div class="price-detail">
+                            <span>Maastoauto / Pakettiauto</span>
+                            <span>Alk. 75€</span>
+                        </div>
+                        <div class="price-note">Kevytvahaus sis. käsinpesu ulkoa ja kevytvahaus</div>
+                    </div>
+                </div>
+
+                <div class="price-card fade-in">
+                    <div class="price-header">
+                        <span class="price-name">KOVA VAHAUS</span>
+                        <span class="price-amount">Alk. 80€</span>
+                    </div>
+                    <div class="price-details">
+                        <div class="price-detail">
+                            <span>Henkilöautot</span>
+                            <span>Alk. 80€</span>
+                        </div>
+                        <div class="price-detail">
+                            <span>Maastoauto / Pakettiauto</span>
+                            <span>Alk. 100€</span>
+                        </div>
+                        <div class="price-note">Kovavahaus sis. käsipesu ulkoa ja kovavahaus (kestää  6kk)</div>
+                    </div>
+                </div>
+
+                <div class="price-card fade-in">
+                    <div class="price-header">
+                        <span class="price-name">UHD-VAHAUS</span>
+                        <span class="price-amount">Alk. 140€</span>
+                    </div>
+                    <div class="price-details">
+                        <div class="price-detail">
+                            <span>Henkilöautot</span>
+                            <span>Alk. 140€</span>
+                        </div>
+                        <div class="price-detail">
+                            <span>Maastoauto / Pakettiauto</span>
+                            <span>Alk. 160€</span>
+                        </div>
+                        <div class="price-note">UHD-vahaus sis. käsipesu ulkoa ja kovavahaus UHD (kestää 12kk)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tehopesu-banner fade-in">
+                <p><strong>TEHOPESU +10€</strong> — sisältää auton ulkopesun tehokkailla aineilla ja poistaa pinttyneen lian</p>
+            </div>
+
+            <div class="extra-services fade-in">
+                <h3>🎯 Lisäpalvelut</h3>
+                <div class="extra-grid">
+                    <div class="extra-item">
+                        <span>Nahkapenkkien hoitokäsittely</span>
+                        <span>Alk. 70€</span>
+                    </div>
+                    <div class="extra-item">
+                        <span>Penkkien pesu / - tahranpoisto</span>
+                        <span>40€</span>
+                    </div>
+                    <div class="extra-item">
+                        <span>Eläinten karvojen poisto</span>
+                        <span>Alk. 10€</span>
+                    </div>
+                    <div class="extra-item">
+                        <span>Moottorinpesu (omavastuu)</span>
+                        <span>30€</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="extra-services fade-in" style="margin-top: 1.5rem;">
+                <h3>🚗Rengaspalvelut </h3>
+                <div class="extra-grid">
+                    <div class="extra-item">
+                        <span>Renkaiden vaihto</span>
+                        <span>20€</span>
+                    </div>
+                    <div class="extra-item">
+                        <span>Renkaiden pesu</span>
+                        <span>10€</span>
+                    </div>
+                    <div class="xtra-item">
+                        <span>+ Vaihdon yhteydessä</span>
+                        <span>5€ (yht. 15€)</span>
+                    </div>
+                    <div class="extra-item">
+                        <span>Renkaiden pakkaus</span>
+                        <span>15€</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Maintenance Section -->
+    <section class="maintenance-section" id="huolto">
+        <div class="section-header fade-in">
+            <h2>Huolto <span>& Korjaus</span></h2>
+            <p>Luotettavaa autohuoltoa ja korjausta Lahdessa</p>
+            <div class="section-line"></div>
+        </div>
+        <div class="maintenance-grid">
+            <div class="maintenance-card fade-in">
+                <span class="icon">🔧</span>
+                <h3>Autohuolto</h3>
+                <p>Säännöllinen huolto on autosi parasta vakuutusta. Teemme määräaikaishuollot, öljynvaihdot, suodattimet ja kaikki muut huoltotyöt. Palvelu nopeasti ja ammattitaidolla.</p>
+                <div class="price-note-box">
+                    <p><strong>Hinta sovittavissa</strong> — Kerro tarpeesi, niin teemme tarjouksen!</p>
+                </div>
+            </div>
+            <div class="maintenance-card fade-in">
+                <span class="icon">🔍</span>
+                <h3>Diagnostiikka</h3>
+                <p>Moderni diagnosetiikkalaitteistomme löytää vian nopeasti. Vikakoodien luku, moottorin analyysi ja paljon muuta. Saat selkeän raportin löydöksistä.</p>
+                <div class="price-note-box">
+                    <p><strong>Hinta sovittavissa</strong> — Diagnostiikka tapauskohtaisesti!</p>
+                </div>
+            </div>
+            <div class="maintenance-card fade-in">
+                <span class="icon">🛠️</span>
+                <h3>Korjaukset</h3>
+                <p>Korjaamme kaiken moottorista vaihteistoon, jarruista alustaan. Olipa kyseessä pieni korjaus tai suurempi remontti, me hoidamme sen.</p>
+                <div class="price-note-box">
+                    <p><strong>Hinta sovittavissa</strong> — Pyydä tarjous korjauksesta!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="booking-section" id="varaus">
+        <div class="section-header fade-in">
+            <h2>Varaa <span>Aika</span></h2>
+            <p>Jätä yhteydenottopyyntö — vastaamme mahdollisimman pian</p>
+            <div class="section-line"></div>
+        </div>
+        <div class="booking-container fade-in">
+            <form class="booking-form" id="bookingForm" action="https://formspree.io/f/maqvvjqa" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nimi *</label>
+                        <input type="text" id="name" name="name" required placeholder="Etunimi Sukunimi">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Puhelinnumero *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="040 123 9567">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Sähköposti *</label>
+                    <input type="email" id="email" name="email" required placeholder="sähköposti@esimerkki.com">
+                </div>
+                <div class="form-group">
+                    <label for="service">Palvelu</label>
+                    <select id="service" name="service">
+                        <option value="">Valitse palvelu...</option>
+                        <option value="sisapesu">Sisäpesu</option>
+                        <option value="ulkopesu">Ulkopesu</option>
+                        <option value="peruspesu">Peruspesu</option>
+                        <option value="tayspesu">Täyspesu</option>
+                        <option value="kevytvaha">Kevytvaha</option>
+                        <option value="kovavaha">Kovavaha</option>
+                        <option value="uhdvaha">UHD-vaha</option>
+                        <option value="tehopesu">Tehopesu</option>
+                        <option value="huolto">Autohuolto</option>
+                        <option value="diagnostiikka">Diagnostiikka</option>
+                        <option value="korjaus">Korjaus</option>
+                        <option value="oljy">Öljynvaihto</option>
+                        <option value="muu">Muu / En tiedä</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Kuvaus ongelmasta / toiveesta *</label>
+                    <textarea id="description" name="description" required placeholder="Kerro lyhyesti mitä tarvitset — esim. auton täyspesu, öljynvaihto, vaihteisto-ongelma, jne."></textarea>
+                </div>
+                <input type="hidden" name="_subject" value="Uusi varauspyyntö - AutoFix Garage">
+                <input type="hidden" name="_replyto" value="%email%">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Lähetä Varauspyyntö
+                    <span class="spinner" id="spinner"></span>
+                </button>
+            </form>
+            <div class="success-message" id="successMessage">
+                <div class="icon">✅</div>
+                <h3>Varauspyyntö lähetetty!</h3>
+                <p>Otamme yhteyttä sinuun mahdollisimman pian.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="yhteystiedot">
+        <div class="section-header fade-in">
+            <h2>Yhteys<span>tiedot</span></h2>
+            <p>Tule käymään tai ota yhteyttä</p>
+            <div class="section-line"></div>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-card fade-in">
+                <div class="contact-icon">📍</div>
+                <h3>Osoite</h3>
+                <p>Mestarinkatu 24<br>15800 Lahti</p>
+            </div>
+            <div class="contact-card fade-in">
+                <div class="contact-icon">📞</div>
+                <h3>Puhelin</h3>
+                <a href="tel:+358413289555">041 328 9555</a>
+            </div>
+            <div class="contact-card fade-in">
+                <div class="contact-icon">✉️</div>
+                <h3>Sähköposti</h3>
+                <a href="mailto:autogaragelahti@gmail.com">autogaragelahti@gmail.com</a>
+            </div>
+            <div class="contact-card fade-in">
+                <div class="contact-icon">🕐</div>
+                <h3>Aukioloajat</h3>
+                <div class="hours-grid">
+                    <span>Ma–Pe</span>
+                    <span>09:00 – 18:00</span>
+                    <span>La</span>
+                    <span>09:00 – 15:00</span>
+                    <span>Su</span>
+                    <span>Suljettu</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logo">AUTO<span>FIX</span> GARAGE</div>
+        <p>Mestarinkatu 24, 15800 Lahti</p>
+        <p>Puh. 041 328 9555 | auto</p>
+        <p class="slogan">Kaikki pesumme tehdään laadukkaasti käsinpesuna!</p>
+        <p style="margin-top: 2rem; font-size: 0.8rem; color: rgba(138, 180, 199, 0.5);">
+            © 2025 AutoFix Garage. Kaikki oikeudet pidätetään.
+        </p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Form handling
+        const bookingForm = document.getElementById('bookingForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('spinner');
+        const successMessage = document.getElementById('successMessage');
+
+        bookingForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            submitBtn.disabled = true;
+            spinner.classList.add('active');
+            submitBtn.innerHTML = 'Lähetetään... <span class="spinner active"></span>';
+
+            try {
+                const formData = new FormData(bookingForm);
+                const response = await fetch(bookingForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    bookingForm.style.display = 'none';
+                    successMessage.classList.add('active');
+                    bookingForm.reset();
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                alert('Lähetys epäonnistui. Yritä uudelleen tai soita suoraan: 041 328 9555');
+                submitBtn.disabled = false;
+                spinner.classList.remove('active');
+                submitBtn.innerHTML = 'Lähetä Varauspyyntö <span class="spinner"></span>';
+            }
+        });
+
+        // Navbar background on scroll
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(0, 13, 26, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(0, 13, 26, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
